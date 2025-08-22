@@ -8,4 +8,5 @@ public class Player {
     String name;
     Bet bet;
     String lobbyId;
+    long winnings;
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="pumpkin.roulette.bot.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="pumpkin.roulette.bot.common.PlayerInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userId" property="userId" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="balance" property="balance" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="BaseColumn">
+        id,
+        userId,
+        name,
+        balance
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+            <include refid="BaseColumn"/>
+        FROM
+            users
+        WHERE
+            id=#{id, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+            <include refid="BaseColumn"/>
+        FROM
+            users
+        WHERE
+            userId=#{userId, jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="pumpkin.roulette.bot.common.PlayerInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            userId,
+            name,
+            balance
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #{userId, jdbcType=VARCHAR},
+            #{name, jdbcType=VARCHAR},
+            #{balance, jdbcType=BIGINT}
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="pumpkin.roulette.bot.common.PlayerInfo">
+        UPDATE users
+        <set>
+            userId = #{userId, jdbcType=VARCHAR},
+            name = #{name, jdbcType=VARCHAR},
+            balance = #{balance, jdbcType=BIGINT}
+        </set>
+        WHERE
+            userId = #{userId, jdbcType=VARCHAR}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String">
+        DELETE FROM users
+        WHERE
+            userId = #{userId, jdbcType=VARCHAR}
+    </delete>
+</mapper>

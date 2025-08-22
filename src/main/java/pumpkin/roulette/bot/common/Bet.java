@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class Bet {
     private String bet;
-    private int amount;
+    private long amount;
 }

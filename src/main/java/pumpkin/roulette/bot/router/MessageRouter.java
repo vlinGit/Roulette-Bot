@@ -45,6 +45,7 @@ public class MessageRouter {
     }
 
     public void route(ModalInteractionEvent event) throws InvocationTargetException, IllegalAccessException {
-        return;
+        String command = event.getInteraction().getModalId().toLowerCase();
+        modalMap.get(command).accept(event);
     }
 }

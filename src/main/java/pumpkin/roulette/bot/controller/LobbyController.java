@@ -1,14 +1,28 @@
 package pumpkin.roulette.bot.controller;
 
+import pumpkin.roulette.bot.BatisBuilder;
 import pumpkin.roulette.bot.common.Lobby;
 
 import java.util.*;
 
 public class LobbyController {
     private final Map<String, Lobby> lobbyMap = new HashMap<>(); // messageId <-> Lobby
+    private final BatisBuilder batisBuilder;
+
+    public LobbyController(BatisBuilder batisBuilder) {
+        this.batisBuilder = batisBuilder;
+    }
 
     public void add(Lobby lobby){
+        lobby.setListener(deleteListener(lobby.getMessageId()));
+        lobby.setBatisBuilder(batisBuilder);
         lobbyMap.put(lobby.getMessageId(), lobby);
+    }
+
+    public Runnable deleteListener(String lobbyId){
+        return () -> {
+            lobbyMap.remove(lobbyId);
+        };
     }
 
     public void delete(String lobbyId){

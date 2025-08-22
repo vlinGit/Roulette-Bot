@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
+import pumpkin.roulette.bot.BatisBuilder;
 import pumpkin.roulette.bot.common.Bet;
 import pumpkin.roulette.bot.common.Lobby;
 import pumpkin.roulette.bot.common.Player;
@@ -21,10 +22,12 @@ import java.util.List;
 public class ButtonController {
     private final JDA api;
     private final LobbyController lobbyController;
+    private final BatisBuilder batisBuilder;
 
-    public ButtonController(JDA api, LobbyController lobbyController) {
+    public ButtonController(JDA api, LobbyController lobbyController, BatisBuilder batisBuilder) {
         this.api = api;
         this.lobbyController = lobbyController;
+        this.batisBuilder = batisBuilder;
     }
 
     public void joinLobby(ButtonInteractionEvent event) {

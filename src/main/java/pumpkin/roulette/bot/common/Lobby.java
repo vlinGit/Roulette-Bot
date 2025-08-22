@@ -4,8 +4,18 @@ import lombok.Data;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import org.apache.ibatis.session.SqlSession;
+import pumpkin.roulette.bot.BatisBuilder;
 import pumpkin.roulette.bot.builder.MessageBuilder;
+import pumpkin.roulette.bot.enums.BetEnum;
+import pumpkin.roulette.bot.enums.LobbyEnums;
+import pumpkin.roulette.bot.enums.WinningEnums;
+import pumpkin.roulette.bot.mapper.UserMapper;
+
 import java.util.HashMap;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 // Call with the JDA and Player objects
 // Set the messageId and channelId after
@@ -17,7 +27,7 @@ public class Lobby {
     private String channelId;
 
     private int playerCount;
-    private HashMap<String, Player> players;
+    private HashMap<String, Player> players; // userId <-> Player
     private boolean joining;
     private boolean closed;
     private int maxPlayers;
@@ -25,16 +35,23 @@ public class Lobby {
 
     private int bets;
 
+    private Runnable listener;
+    private BatisBuilder batisBuilder;
+
     public Lobby(Player owner, JDA api) {
         this.api = api;
-        this.playerCount = 1;
-        this.players = new HashMap<>(){{
-            put(owner.getUserId(), owner);
-        }};
+        this.players = new HashMap<>();
         this.closed = false;
-        this.maxPlayers = 8;
+        this.maxPlayers = LobbyEnums.MAX_PLAYERS.getValue();
         this.owner = owner;
         this.bets = 0;
+    }
+
+    public void startGame(Player operator){
+        if (!operator.getName().equals(owner.getName())){
+            return;
+        }
+        drawBetMenu();
     }
 
     public void addPlayer(Player player){
@@ -57,16 +74,50 @@ public class Lobby {
         }
     }
 
-    public void startGame(Player operator){
-        if (operator.getName() != owner.getName()){
-            return;
-        }
-        drawBetMenu();
+    public void stopLobby() {
+        listener.run();
     }
 
-    public void stopLobby() {
-        joining = false;
-        closed = true;
+    private void handleResult() {
+        String winningNumber;
+        int winningBet = new Random().nextInt(5);
+        if (winningBet == 4){
+            winningNumber = String.valueOf(new Random().nextInt(36) + 1);
+        } else {
+            winningNumber = "";
+        }
+
+        players.forEach((userId, player) -> {
+            String result = Integer.toString(winningBet);
+            Bet playerBet = player.getBet();
+
+            player.setWinnings(playerBet.getAmount() * -1);
+            if (result.matches(BetEnum.NUMBER.getValue())){
+                if (winningNumber.matches(playerBet.getBet())){
+                    player.setWinnings(playerBet.getAmount() * WinningEnums.NUMBER.getValue());
+                }else{
+                    player.setWinnings(playerBet.getAmount() * -1);
+                }
+            }else if(result.matches(playerBet.getBet())) {
+                if (result.matches(BetEnum.BLACK.getValue()) || result.matches(BetEnum.RED.getValue())) {
+                    player.setWinnings(playerBet.getAmount() * WinningEnums.COLOR.getValue());
+                } else if (result.matches(BetEnum.ODD.getValue()) || result.matches(BetEnum.EVEN.getValue())) {
+                    player.setWinnings(playerBet.getAmount() * WinningEnums.PARITY.getValue());
+                }
+            }
+        });
+
+        players.forEach((userId, player) -> {
+            try(SqlSession session = batisBuilder.getSession()){
+                UserMapper userMapper = session.getMapper(UserMapper.class);
+                PlayerInfo playerInfo = userMapper.selectByUserId(player.getUserId());
+                playerInfo.setBalance(playerInfo.getBalance() + player.getWinnings());
+
+                userMapper.update(playerInfo);
+            }
+        });
+        drawResultMenu();
+        stopLobby();
     }
 
     public void addBet(Bet bet, String userId){
@@ -90,8 +141,15 @@ public class Lobby {
         }
     }
 
-    public String startSpin(){
-        return "";
+    private void startSpin(){
+        drawSpinningMenu();
+        Timer timer = new Timer(true);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handleResult();
+            }
+        }, 5000);
     }
 
     public void drawStartMenu(){
@@ -116,16 +174,15 @@ public class Lobby {
                 .queue();
     }
 
-    // Betting menu is the pop-up that allows users to place a bet
-    public void drawBettingMenu(){
-
-    }
-
     public void drawSpinningMenu(){
-
+        TextChannel textChannel = api.getTextChannelById(channelId);
+        String message = MessageBuilder.buildSpinningMenu(this);
+        textChannel.editMessageById(messageId, message).setComponents().queue();
     }
 
-    public void resultMenu(){
-
+    public void drawResultMenu(){
+        TextChannel textChannel = api.getTextChannelById(channelId);
+        String message = MessageBuilder.buildResultMenu(this);
+        textChannel.editMessageById(messageId, message).setComponents().queue();
     }
 }
