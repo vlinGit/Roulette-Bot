@@ -38,13 +38,14 @@ public class Lobby {
     private Runnable listener;
     private BatisBuilder batisBuilder;
 
-    public Lobby(Player owner, JDA api) {
+    public Lobby(Player owner, JDA api, BatisBuilder batisBuilder) {
         this.api = api;
         this.players = new HashMap<>();
         this.closed = false;
         this.maxPlayers = LobbyEnums.MAX_PLAYERS.getValue();
         this.owner = owner;
         this.bets = 0;
+        this.batisBuilder = batisBuilder;
     }
 
     public void startGame(Player operator){
@@ -75,7 +76,9 @@ public class Lobby {
     }
 
     public void stopLobby() {
-        listener.run();
+        if (listener != null){
+            listener.run();
+        }
     }
 
     private void handleResult() {

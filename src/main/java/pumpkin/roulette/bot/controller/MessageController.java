@@ -40,7 +40,7 @@ public class MessageController {
         player.setName(event.getAuthor().getName());
         player.setUserId(event.getAuthor().getId());
 
-        Lobby lobby = new Lobby(player, api);
+        Lobby lobby = new Lobby(player, api, batisBuilder);
         lobby.setOwner(player);
 
         event.getChannel().sendMessage("Creating lobby...").queue(sent -> {

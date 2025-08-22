@@ -7,15 +7,9 @@ import java.util.*;
 
 public class LobbyController {
     private final Map<String, Lobby> lobbyMap = new HashMap<>(); // messageId <-> Lobby
-    private final BatisBuilder batisBuilder;
-
-    public LobbyController(BatisBuilder batisBuilder) {
-        this.batisBuilder = batisBuilder;
-    }
 
     public void add(Lobby lobby){
         lobby.setListener(deleteListener(lobby.getMessageId()));
-        lobby.setBatisBuilder(batisBuilder);
         lobbyMap.put(lobby.getMessageId(), lobby);
     }
 

@@ -29,7 +29,7 @@ public class Main {
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .build();
 
-        LobbyController lobbyController = new LobbyController(batisBuilder);
+        LobbyController lobbyController = new LobbyController();
         MessageController messageController = new MessageController(api, lobbyController, batisBuilder);
         ButtonController buttonController = new ButtonController(api, lobbyController, batisBuilder);
         ModalController modalController = new ModalController(api, lobbyController, batisBuilder);
