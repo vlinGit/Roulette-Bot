@@ -46,7 +46,7 @@ public class MessageBuilder {
                     .append(" -> ")
                     .append("Bet: ");
             bets.append("$").append(player.getBet().getAmount()).append(" on ").append(player.getBet().getBet().toUpperCase());
-            bets.append("Spinning...");
+            bets.append("\n https://tenor.com/view/roulette-spin-gif-11706381442831131809 \n***Spinning***...");
         });
 
         return String.format(message, lobby.getBets(), lobby.getPlayerCount(), bets);
@@ -54,7 +54,7 @@ public class MessageBuilder {
 
     public static String buildResultMenu(Lobby lobby){
         String message = "Roulette Table\n"
-                + "Result:\n"
+                + "Result: %s\n"
                 + "%s\n";
         StringBuilder results = new StringBuilder();
         lobby.getPlayers().forEach((userId, player) -> {
@@ -65,9 +65,10 @@ public class MessageBuilder {
             }else{
                 results.append("WON +");
             }
-            results.append("$").append(Math.abs(player.getWinnings()));
+            results.append("$").append(Math.abs(player.getWinnings()))
+                    .append(" (Bet ").append("$").append(player.getBet().getAmount()).append(" on ").append(player.getBet().getBet().toUpperCase()).append(")");
         });
 
-        return String.format(message, results);
+        return String.format(message, lobby.getWinningNumber() + " " + lobby.getWinningColor(), results);
     }
 }

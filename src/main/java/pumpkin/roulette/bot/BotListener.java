@@ -48,6 +48,9 @@ public class BotListener extends ListenerAdapter {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        } catch (NullPointerException e) {
+            System.out.println("Null pointer exception, likely just a command that doesn't exist");
+            e.printStackTrace();
         }
     }
 
@@ -61,6 +64,9 @@ public class BotListener extends ListenerAdapter {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        } catch (NullPointerException e) {
+            System.out.println("Null pointer exception, likely just a command that doesn't exist");
+            e.printStackTrace();
         }
     }
 
@@ -72,6 +78,9 @@ public class BotListener extends ListenerAdapter {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        } catch (NullPointerException e) {
+            System.out.println("Null pointer exception, likely just a command that doesn't exist");
+            e.printStackTrace();
         }
     }
 }

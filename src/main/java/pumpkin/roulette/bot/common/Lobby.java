@@ -7,15 +7,11 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.apache.ibatis.session.SqlSession;
 import pumpkin.roulette.bot.BatisBuilder;
 import pumpkin.roulette.bot.builder.MessageBuilder;
-import pumpkin.roulette.bot.enums.BetEnum;
 import pumpkin.roulette.bot.enums.LobbyEnums;
 import pumpkin.roulette.bot.enums.WinningEnums;
 import pumpkin.roulette.bot.mapper.UserMapper;
 
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 // Call with the JDA and Player objects
 // Set the messageId and channelId after
@@ -34,6 +30,8 @@ public class Lobby {
     private Player owner;
 
     private int bets;
+    private int winningNumber;
+    private String winningColor;
 
     private Runnable listener;
     private BatisBuilder batisBuilder;
@@ -81,32 +79,29 @@ public class Lobby {
         }
     }
 
+    private String checkParity(int number){
+        return (number % 2 == 0) ? "EVEN" : "ODD";
+    }
+
     private void handleResult() {
-        String winningNumber;
-        int winningBet = new Random().nextInt(5);
-        if (winningBet == 4){
-            winningNumber = String.valueOf(new Random().nextInt(36) + 1);
-        } else {
-            winningNumber = "";
-        }
+        List<String> winningChoices =  new ArrayList<>(){{
+            add("BLACK");
+            add("RED");
+        }};
+        winningColor = winningChoices.get(new Random().nextInt(2)); // black = 0, red = 1;
+        winningNumber = new Random().nextInt(36) + 1;
+        String winningParity = checkParity(winningNumber);
 
         players.forEach((userId, player) -> {
-            String result = Integer.toString(winningBet);
             Bet playerBet = player.getBet();
-
             player.setWinnings(playerBet.getAmount() * -1);
-            if (result.matches(BetEnum.NUMBER.getValue())){
-                if (winningNumber.matches(playerBet.getBet())){
-                    player.setWinnings(playerBet.getAmount() * WinningEnums.NUMBER.getValue());
-                }else{
-                    player.setWinnings(playerBet.getAmount() * -1);
-                }
-            }else if(result.matches(playerBet.getBet())) {
-                if (result.matches(BetEnum.BLACK.getValue()) || result.matches(BetEnum.RED.getValue())) {
-                    player.setWinnings(playerBet.getAmount() * WinningEnums.COLOR.getValue());
-                } else if (result.matches(BetEnum.ODD.getValue()) || result.matches(BetEnum.EVEN.getValue())) {
-                    player.setWinnings(playerBet.getAmount() * WinningEnums.PARITY.getValue());
-                }
+
+            if (String.valueOf(winningNumber).matches(playerBet.getBet())) {
+                player.setWinnings(playerBet.getAmount() * WinningEnums.NUMBER.getValue());
+            }else if(winningColor.matches(playerBet.getBet())) {
+                player.setWinnings(playerBet.getAmount() * WinningEnums.COLOR.getValue());
+            }else if(winningParity.matches(playerBet.getBet())) {
+                player.setWinnings(playerBet.getAmount() * WinningEnums.PARITY.getValue());
             }
         });
 
@@ -152,7 +147,7 @@ public class Lobby {
             public void run() {
                 handleResult();
             }
-        }, 5000);
+        }, LobbyEnums.SPIN_TIME.getValue());
     }
 
     public void drawStartMenu(){

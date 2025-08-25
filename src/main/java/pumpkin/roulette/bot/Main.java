@@ -19,6 +19,10 @@ import pumpkin.roulette.bot.router.MessageRouter;
 import java.io.IOException;
 import java.io.InputStream;
 
+// TODO:
+// - Add 24hr timer to top-up player balance if < DefaultEnums.RECHARGE_BALANCE
+// - Add help menu
+// - Test multiplayer lobby
 public class Main {
     public static void main(String[] args) throws IOException {
         BatisBuilder batisBuilder = new BatisBuilder();
@@ -36,7 +40,7 @@ public class Main {
 
         router.addMessageRoute("!ping", messageController::ping);
         router.addMessageRoute("!startlobby", messageController::startLobby);
-        router.addMessageRoute("!playerinfo", messageController::playerInfo);
+        router.addMessageRoute("!stats", messageController::playerInfo);
 
         router.addButtonRoute("join", buttonController::joinLobby);
         router.addButtonRoute("start", buttonController::startGame);

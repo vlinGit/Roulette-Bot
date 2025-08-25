@@ -1,6 +1,7 @@
 package pumpkin.roulette.bot;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -12,9 +13,8 @@ public class BotConfig {
     static{
         try{
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-            URL url = classloader.getResource("application.properties");
-            FileInputStream configFile = new FileInputStream(url.getPath());
-            config.load(configFile);
+            InputStream input = classloader.getResourceAsStream("application.properties");
+            config.load(input);
         }catch(IOException e){
             e.printStackTrace();
         }

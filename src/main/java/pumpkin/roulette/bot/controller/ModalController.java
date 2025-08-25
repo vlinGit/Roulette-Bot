@@ -7,9 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import pumpkin.roulette.bot.BatisBuilder;
 import pumpkin.roulette.bot.common.Bet;
 import pumpkin.roulette.bot.common.Lobby;
-import pumpkin.roulette.bot.common.PlayerChoice;
 import pumpkin.roulette.bot.common.PlayerInfo;
-import pumpkin.roulette.bot.enums.BetEnum;
 import pumpkin.roulette.bot.mapper.UserMapper;
 
 import java.util.List;
@@ -60,7 +58,7 @@ public class ModalController {
 
         try{
             Bet bet = new Bet();
-            bet.setBet(BetEnum.valueOf(betType.toUpperCase()).toString());
+            bet.setBet(betType);
             bet.setAmount(Integer.parseInt(amount));
 
             lobby.addBet(bet, userId);
