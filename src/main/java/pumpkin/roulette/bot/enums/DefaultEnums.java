@@ -2,7 +2,8 @@ package pumpkin.roulette.bot.enums;
 
 public enum DefaultEnums {
     START_BALANCE (100),
-    RECHARGE_BALANCE (100);
+    RECHARGE_BALANCE (100),
+    RECHARGE_DAYS(1);
 
     private long value;
 

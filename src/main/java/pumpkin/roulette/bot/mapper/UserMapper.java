@@ -9,6 +9,8 @@ public interface UserMapper extends CommonMapper<PlayerInfo>{
 
     PlayerInfo selectByUserId(String userId);
 
+    List<PlayerInfo> selectByPlayerInfo(PlayerInfo playerInfo);
+
     int insert(PlayerInfo playerInfo);
 
     int update(PlayerInfo playerInfo);
