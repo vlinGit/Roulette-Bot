@@ -2,26 +2,18 @@ package pumpkin.roulette.bot;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import pumpkin.roulette.bot.BotListener;
 import pumpkin.roulette.bot.controller.ButtonController;
 import pumpkin.roulette.bot.controller.LobbyController;
 import pumpkin.roulette.bot.controller.MessageController;
 import pumpkin.roulette.bot.controller.ModalController;
-import pumpkin.roulette.bot.mapper.UserMapper;
 import pumpkin.roulette.bot.router.MessageRouter;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 // TODO:
-// - Add 24hr timer to top-up player balance if < DefaultEnums.RECHARGE_BALANCE
 // - Add help menu
+// - Add 24hr timer to top-up player balance if < DefaultEnums.RECHARGE_BALANCE
 // - Test multiplayer lobby
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -41,6 +33,7 @@ public class Main {
         router.addMessageRoute("!ping", messageController::ping);
         router.addMessageRoute("!startlobby", messageController::startLobby);
         router.addMessageRoute("!stats", messageController::playerInfo);
+        router.addMessageRoute("!help", messageController::helpMenu);
 
         router.addButtonRoute("join", buttonController::joinLobby);
         router.addButtonRoute("start", buttonController::startGame);

@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.ibatis.session.SqlSession;
 import pumpkin.roulette.bot.BatisBuilder;
+import pumpkin.roulette.bot.builder.MessageBuilder;
 import pumpkin.roulette.bot.common.Lobby;
 import pumpkin.roulette.bot.common.Player;
 import pumpkin.roulette.bot.common.PlayerInfo;
@@ -25,6 +26,10 @@ public class MessageController {
 
     public void ping(MessageReceivedEvent event){
         event.getChannel().sendMessage("Pong!").queue();
+    }
+
+    public void helpMenu(MessageReceivedEvent event){
+        event.getChannel().sendMessage(MessageBuilder.buildHelpMenu()).queue();
     }
 
     public void playerInfo(MessageReceivedEvent event){

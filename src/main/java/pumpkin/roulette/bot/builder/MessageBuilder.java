@@ -17,6 +17,14 @@ public class MessageBuilder {
         return String.format(message, lobby.getPlayerCount(), lobby.getMaxPlayers(), players);
     }
 
+    public static String buildHelpMenu() {
+        String message = "Commands\n" +
+                "**!help**: shows this menu\n" +
+                "**!startlobby**: starts a new game\n" +
+                "**!stats**: view your stats";
+        return message;
+    }
+
     public static String buildBetMenu(Lobby lobby) {
         String message = "Roulette Table\n"
                 + "Place your bets: (%d/%d)\n"
