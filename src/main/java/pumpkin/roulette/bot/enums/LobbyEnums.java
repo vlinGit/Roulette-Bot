@@ -3,7 +3,7 @@ package pumpkin.roulette.bot.enums;
 public enum LobbyEnums {
     MAX_PLAYERS (10),
     SPIN_TIME (7000), // ms
-    LOBBY_EXPIRE_TIME(1); // minutes
+    LOBBY_EXPIRE_TIME(5); // minutes
 
     private int value;
 

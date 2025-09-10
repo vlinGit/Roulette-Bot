@@ -56,7 +56,6 @@ public class Lobby {
     }
 
     public void startGame(Player operator){
-        this.future.cancel(false);
         if (!operator.getName().equals(owner.getName())){
             return;
         }
@@ -150,6 +149,7 @@ public class Lobby {
     }
 
     private void startSpin(){
+        future.cancel(false);
         drawSpinningMenu();
         Timer timer = new Timer(true);
         timer.schedule(new TimerTask() {
