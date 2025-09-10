@@ -27,7 +27,7 @@ public class ModalController {
     public void betVerify(ModalInteractionEvent event){
         List<ModalMapping> mappings = event.getInteraction().getValues();
         String lobbyId = mappings.get(0).getAsString();
-        String betType = mappings.get(1).getAsString();
+        String betType = mappings.get(1).getAsString().toUpperCase();
         String amount = mappings.get(2).getAsString();
         String userId = event.getUser().getId();
         Lobby lobby = lobbyController.get(lobbyId);

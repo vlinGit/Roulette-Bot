@@ -39,6 +39,7 @@ public class MessageBuilder {
             }else{
                 bets.append("waiting on bet");
             }
+            bets.append("\n");
         });
 
         return String.format(message, lobby.getBets(), lobby.getPlayerCount(), bets);
@@ -53,10 +54,10 @@ public class MessageBuilder {
             bets.append("<@").append(userId).append(">")
                     .append(" -> ")
                     .append("Bet: ");
-            bets.append("$").append(player.getBet().getAmount()).append(" on ").append(player.getBet().getBet().toUpperCase());
-            bets.append("\n https://tenor.com/view/roulette-spin-gif-11706381442831131809 \n***Spinning***...");
+            bets.append("$").append(player.getBet().getAmount()).append(" on ").append(player.getBet().getBet().toUpperCase()).append("\n");
         });
 
+        bets.append("\n https://tenor.com/view/roulette-spin-gif-11706381442831131809 \n***Spinning***...");
         return String.format(message, lobby.getBets(), lobby.getPlayerCount(), bets);
     }
 
@@ -74,7 +75,7 @@ public class MessageBuilder {
                 results.append("WON +");
             }
             results.append("$").append(Math.abs(player.getWinnings()))
-                    .append(" (Bet ").append("$").append(player.getBet().getAmount()).append(" on ").append(player.getBet().getBet().toUpperCase()).append(")");
+                    .append(" (Bet ").append("$").append(player.getBet().getAmount()).append(" on ").append(player.getBet().getBet().toUpperCase()).append(")").append("\n");
         });
 
         return String.format(message, lobby.getWinningNumber() + " " + lobby.getWinningColor(), results);

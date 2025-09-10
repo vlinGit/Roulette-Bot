@@ -23,6 +23,9 @@ import java.util.concurrent.TimeUnit;
 
 // TODO:
 // - Test multiplayer lobby
+// - Track timestamp via DB
+//      - update timestamp every loop
+//      - use when restarting bot and compare the elapsed time
 public class Main {
     public static void main(String[] args) throws IOException {
         BatisBuilder batisBuilder = new BatisBuilder();
