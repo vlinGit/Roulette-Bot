@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 // - Track timestamp via DB
 //      - update timestamp every loop
 //      - use when restarting bot and compare the elapsed time
+// - Make enums take fields from application.properties
 public class Main {
     public static void main(String[] args) throws IOException {
         BatisBuilder batisBuilder = new BatisBuilder();

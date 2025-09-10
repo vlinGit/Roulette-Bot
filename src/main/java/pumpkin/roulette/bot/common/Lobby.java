@@ -12,6 +12,10 @@ import pumpkin.roulette.bot.enums.WinningEnums;
 import pumpkin.roulette.bot.mapper.UserMapper;
 
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 // Call with the JDA and Player objects
 // Set the messageId and channelId after
@@ -36,6 +40,9 @@ public class Lobby {
     private Runnable listener;
     private BatisBuilder batisBuilder;
 
+    private final ScheduledExecutorService scheduler;
+    private final ScheduledFuture<?> future;
+
     public Lobby(Player owner, JDA api, BatisBuilder batisBuilder) {
         this.api = api;
         this.players = new HashMap<>();
@@ -44,9 +51,12 @@ public class Lobby {
         this.owner = owner;
         this.bets = 0;
         this.batisBuilder = batisBuilder;
+        this.scheduler = Executors.newScheduledThreadPool(1);
+        this.future = this.scheduler.schedule(this::stopLobby, LobbyEnums.LOBBY_EXPIRE_TIME.getValue(), TimeUnit.MINUTES);
     }
 
     public void startGame(Player operator){
+        this.future.cancel(false);
         if (!operator.getName().equals(owner.getName())){
             return;
         }
