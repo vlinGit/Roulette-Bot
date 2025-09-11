@@ -12,17 +12,20 @@ import pumpkin.roulette.bot.router.MessageRouter;
 import java.io.IOException;
 
 // TODO:
-// - Test multiplayer lobby
+// - Don't allow players with no balance to join
+// - Add !give options
+// - Leaderboard
+// - Fix math error when calculating wins (the initial bet needs to be deducted first)
+// - Add !nextrefill, !leaderboard, !give to help menu
+
+// - Show final balance after spin
 // - Track timestamp via DB
 //      - update timestamp every loop
 //      - use when restarting bot and compare the elapsed time
 // - Make enums take fields from application.properties
-// - Add !give options
-//      - Maybe a loan option?
-// - Don't allow players with no balance to join
 // - Come up with a way that allows me to edit the results live
-// - Show final balance after spin
 // - Add a green option (should deduct percentages from changes of red/black)
+// - randomize roulette spin time
 public class Main {
     public static void main(String[] args) throws IOException {
         BatisBuilder batisBuilder = new BatisBuilder();

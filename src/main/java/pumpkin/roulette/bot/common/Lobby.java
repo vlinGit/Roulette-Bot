@@ -69,6 +69,16 @@ public class Lobby {
                 return;
             }
 
+//            try (SqlSession session = batisBuilder.getSession()) {
+//                UserMapper userMapper = session.getMapper(UserMapper.class);
+//                PlayerInfo playerInfo = userMapper.selectByUserId(player.getUserId());
+//
+//                if (playerInfo.getBalance() == 0){
+//
+//                    return;
+//                }
+//            }
+
             players.put(player.getUserId(), player);
             playerCount++;
 

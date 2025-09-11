@@ -55,6 +55,10 @@ public class MessageController {
         event.getChannel().sendMessage(result).queue();
     }
 
+    public void give(MessageReceivedEvent event){
+
+    }
+
     public void startLobby(MessageReceivedEvent event){
         Player player = new Player();
         player.setName(event.getAuthor().getName());

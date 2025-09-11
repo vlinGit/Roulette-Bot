@@ -41,6 +41,7 @@ public class ModalController {
         }
         if (!betPattern.matcher(betType).matches()){
             event.reply("Invalid bet. Valid bets are: black, even, odd, or a number between 1-36")
+                    .setEphemeral(true)
                     .queue();
             return;
         }
