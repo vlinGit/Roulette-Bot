@@ -90,7 +90,7 @@ public class MessageBuilder {
         StringBuilder builder = new StringBuilder();
         builder.append("**Top 10 Highest Balance**\n");
         leaderboard.forEach((playerInfo) -> {
-            builder.append("<@").append(playerInfo.getUserId()).append(">")
+            builder.append(playerInfo.getName())
                     .append(" | $")
                     .append(playerInfo.getBalance())
                     .append("\n");
