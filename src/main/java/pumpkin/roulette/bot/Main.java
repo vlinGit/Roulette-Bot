@@ -2,24 +2,14 @@ package pumpkin.roulette.bot;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import org.apache.ibatis.session.SqlSession;
-import pumpkin.roulette.bot.common.PlayerInfo;
 import pumpkin.roulette.bot.controller.ButtonController;
 import pumpkin.roulette.bot.controller.LobbyController;
 import pumpkin.roulette.bot.controller.MessageController;
 import pumpkin.roulette.bot.controller.ModalController;
-import pumpkin.roulette.bot.enums.DefaultEnums;
 import pumpkin.roulette.bot.router.MessageRouter;
-import pumpkin.roulette.bot.mapper.UserMapper;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 // TODO:
 // - Test multiplayer lobby
@@ -27,6 +17,12 @@ import java.util.concurrent.TimeUnit;
 //      - update timestamp every loop
 //      - use when restarting bot and compare the elapsed time
 // - Make enums take fields from application.properties
+// - Add !give options
+//      - Maybe a loan option?
+// - Don't allow players with no balance to join
+// - Come up with a way that allows me to edit the results live
+// - Show final balance after spin
+// - Add a green option (should deduct percentages from changes of red/black)
 public class Main {
     public static void main(String[] args) throws IOException {
         BatisBuilder batisBuilder = new BatisBuilder();
