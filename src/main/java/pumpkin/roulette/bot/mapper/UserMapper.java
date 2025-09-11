@@ -16,4 +16,6 @@ public interface UserMapper extends CommonMapper<PlayerInfo>{
     int update(PlayerInfo playerInfo);
 
     void delete(int id);
+
+    List<PlayerInfo> selectLeaderboard();
 }

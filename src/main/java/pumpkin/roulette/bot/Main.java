@@ -12,12 +12,6 @@ import pumpkin.roulette.bot.router.MessageRouter;
 import java.io.IOException;
 
 // TODO:
-// - Don't allow players with no balance to join
-// - Add !give options
-// - Leaderboard
-// - Fix math error when calculating wins (the initial bet needs to be deducted first)
-// - Add !nextrefill, !leaderboard, !give to help menu
-
 // - Show final balance after spin
 // - Track timestamp via DB
 //      - update timestamp every loop
@@ -49,6 +43,8 @@ public class Main {
         router.addMessageRoute("!stats", messageController::playerInfo);
         router.addMessageRoute("!help", messageController::helpMenu);
         router.addMessageRoute("!nextrefill", messageController::nextRefill);
+        router.addMessageRoute("!give", messageController::give);
+        router.addMessageRoute("!leaderboard", messageController::leaderboard);
 
         router.addButtonRoute("join", buttonController::joinLobby);
         router.addButtonRoute("start", buttonController::startGame);

@@ -54,6 +54,14 @@
             </trim>
     </select>
 
+    <select id="selectLeaderboard" resultMap="BaseResultMap" parameterType="pumpkin.roulette.bot.common.PlayerInfo">
+        SELECT
+            <include refid="BaseColumn"/>
+        FROM
+            users
+        ORDER BY balance DESC LIMIT 10;
+    </select>
+
     <insert id="insert" parameterType="pumpkin.roulette.bot.common.PlayerInfo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO users
         <trim prefix="(" suffix=")" suffixOverrides=",">

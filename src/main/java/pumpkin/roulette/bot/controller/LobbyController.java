@@ -1,6 +1,5 @@
 package pumpkin.roulette.bot.controller;
 
-import pumpkin.roulette.bot.BatisBuilder;
 import pumpkin.roulette.bot.common.Lobby;
 
 import java.util.*;

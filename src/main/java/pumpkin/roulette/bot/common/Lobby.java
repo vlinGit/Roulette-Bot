@@ -69,15 +69,15 @@ public class Lobby {
                 return;
             }
 
-//            try (SqlSession session = batisBuilder.getSession()) {
-//                UserMapper userMapper = session.getMapper(UserMapper.class);
-//                PlayerInfo playerInfo = userMapper.selectByUserId(player.getUserId());
-//
-//                if (playerInfo.getBalance() == 0){
-//
-//                    return;
-//                }
-//            }
+            try (SqlSession session = batisBuilder.getSession()) {
+                UserMapper userMapper = session.getMapper(UserMapper.class);
+                PlayerInfo playerInfo = userMapper.selectByUserId(player.getUserId());
+
+                if (playerInfo.getBalance() == 0){
+                    api.getTextChannelById(channelId).sendMessage("<@" + player.getUserId() + "> insufficent balance").queue();
+                    return;
+                }
+            }
 
             players.put(player.getUserId(), player);
             playerCount++;
@@ -116,11 +116,11 @@ public class Lobby {
             player.setWinnings(playerBet.getAmount() * -1);
 
             if (String.valueOf(winningNumber).matches(playerBet.getBet())) {
-                player.setWinnings(playerBet.getAmount() * WinningEnums.NUMBER.getValue());
+                player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.NUMBER.getValue());
             }else if(winningColor.matches(playerBet.getBet())) {
-                player.setWinnings(playerBet.getAmount() * WinningEnums.COLOR.getValue());
+                player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.COLOR.getValue());
             }else if(winningParity.matches(playerBet.getBet())) {
-                player.setWinnings(playerBet.getAmount() * WinningEnums.PARITY.getValue());
+                player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.PARITY.getValue());
             }
         });
 

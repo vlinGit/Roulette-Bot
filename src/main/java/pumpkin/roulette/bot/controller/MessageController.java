@@ -1,6 +1,7 @@
 package pumpkin.roulette.bot.controller;
 
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.ibatis.session.SqlSession;
@@ -14,7 +15,7 @@ import pumpkin.roulette.bot.enums.DefaultEnums;
 import pumpkin.roulette.bot.mapper.UserMapper;
 
 import java.io.IOException;
-import java.sql.Time;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MessageController {
@@ -55,8 +56,41 @@ public class MessageController {
         event.getChannel().sendMessage(result).queue();
     }
 
+    // !give @p1 100
     public void give(MessageReceivedEvent event){
+        Message message = event.getMessage();
 
+        try{
+            List<User> mentions = message.getMentions().getUsers();
+            if (mentions.size() > 1){
+                throw new Exception();
+            }
+
+            int amount = Integer.parseInt(message.getContentRaw().split(" ")[2].strip());
+            try (SqlSession session = batisBuilder.getSession()) {
+                UserMapper userMapper = session.getMapper(UserMapper.class);
+                PlayerInfo reciever = userMapper.selectByUserId(mentions.get(0).getId());
+                PlayerInfo sender = userMapper.selectByUserId(event.getAuthor().getId());
+                sender.setBalance(sender.getBalance() - amount);
+                reciever.setBalance(reciever.getBalance() + amount);
+                userMapper.update(reciever);
+                userMapper.update(sender);
+            }
+
+            event.getChannel().sendMessage("<@" + event.getAuthor().getId() + "> sent <@" + mentions.get(0).getId() + "> $" + amount).queue();
+        }catch (Exception e){
+            e.printStackTrace();
+            event.getChannel().sendMessage("Invalid input!").queue();
+        }
+    }
+
+    public void leaderboard(MessageReceivedEvent event){
+        try(SqlSession session = batisBuilder.getSession()) {
+            UserMapper userMapper = session.getMapper(UserMapper.class);
+            List<PlayerInfo> leaderboard = userMapper.selectLeaderboard();
+
+            event.getChannel().sendMessage(MessageBuilder.buildLeaderboard(leaderboard)).queue();
+        }
     }
 
     public void startLobby(MessageReceivedEvent event){
