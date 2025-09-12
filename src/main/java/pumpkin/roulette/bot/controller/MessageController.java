@@ -93,6 +93,31 @@ public class MessageController {
         }
     }
 
+    public void leave(MessageReceivedEvent event){
+        try(SqlSession session = batisBuilder.getSession()) {
+            UserMapper userMapper = session.getMapper(UserMapper.class);
+            PlayerInfo playerInfo = userMapper.selectByUserId(event.getAuthor().getId());
+            String lobbyId = playerInfo.getLobbyId();
+            Player player = new Player();
+            player.setUserId(playerInfo.getUserId());
+            Lobby lobby = lobbyController.get(lobbyId);
+
+            try{
+                lobby.removePlayer(player);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+                System.out.println("Lobby not found, likely because lobby was already emptied due to restart. Manually clearing player data");
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+                System.out.println("Critical error, manually clearing player data");
+            }finally{
+                playerInfo.setLobbyId("");
+                playerInfo.setInLobby(0);
+                userMapper.update(playerInfo);
+            }
+        }
+    }
+
     public void startLobby(MessageReceivedEvent event){
         Player player = new Player();
         player.setName(event.getAuthor().getName());

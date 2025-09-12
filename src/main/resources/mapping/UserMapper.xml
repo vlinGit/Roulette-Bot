@@ -5,13 +5,17 @@
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="balance" property="balance" jdbcType="BIGINT"/>
+        <result column="lobbyId" property="lobbyId" jdbcType="VARCHAR"/>
+        <result column="inLobby" property="inLobby" jdbcType="BOOLEAN"/>
     </resultMap>
 
     <sql id="BaseColumn">
         id,
         userId,
         name,
-        balance
+        balance,
+        lobbyId,
+        inLobby
     </sql>
 
     <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -49,7 +53,13 @@
                     name=#{name, jdbcType=VARCHAR} AND
                 </if>
                 <if test="balance != null">
-                    balance=#{balance, jdbcType=BIGINT}
+                    balance=#{balance, jdbcType=BIGINT} AND
+                </if>
+                <if test="inLobby != null">
+                    inLobby=#{inLobby, jdbcType=BOOLEAN} AND
+                </if>
+                <if test="lobbyId != null">
+                    lobbyId=#{lobbyId, jdbcType=VARCHAR}
                 </if>
             </trim>
     </select>
@@ -80,9 +90,26 @@
     <update id="update" parameterType="pumpkin.roulette.bot.common.PlayerInfo">
         UPDATE users
         <set>
-            userId = #{userId, jdbcType=VARCHAR},
-            name = #{name, jdbcType=VARCHAR},
-            balance = #{balance, jdbcType=BIGINT}
+            <trim suffix="" suffixOverrides="," >
+                <if test="id != null and id > 0">
+                    id=#{id, jdbcType=INTEGER},
+                </if>
+                <if test="userId != null">
+                    userId=#{userId, jdbcType=VARCHAR},
+                </if>
+                <if test="name != null">
+                    name=#{name, jdbcType=VARCHAR},
+                </if>
+                <if test="balance != null">
+                    balance=#{balance, jdbcType=BIGINT},
+                </if>
+                <if test="inLobby != null">
+                    inLobby=#{inLobby, jdbcType=BOOLEAN},
+                </if>
+                <if test="lobbyId != null">
+                    lobbyId=#{lobbyId, jdbcType=VARCHAR}
+                </if>
+            </trim>
         </set>
         WHERE
             userId = #{userId, jdbcType=VARCHAR}

@@ -4,5 +4,7 @@ create table users
         primary key,
     userId  varchar(128) not null,
     name    varchar(256) not null,
-    balance bigint       not null
+    balance bigint       not null,
+    lobbyId varchar(256),
+    inLobby bool default 0
 );

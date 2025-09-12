@@ -10,6 +10,8 @@ public class PlayerInfo {
     String userId;
     String name;
     long balance;
+    String lobbyId;
+    int inLobby;
 
     public MessageEmbed toEmbed(){
         return new EmbedBuilder()

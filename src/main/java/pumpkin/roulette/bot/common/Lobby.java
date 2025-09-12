@@ -76,7 +76,14 @@ public class Lobby {
                 if (playerInfo.getBalance() == 0){
                     api.getTextChannelById(channelId).sendMessage("<@" + player.getUserId() + "> insufficent balance").queue();
                     return;
+                }else if(playerInfo.inLobby == 1){
+                    api.getTextChannelById(channelId).sendMessage("<@" + player.getUserId() + "> is already in a lobby").queue();
+                    return;
                 }
+
+                playerInfo.inLobby = 1;
+                playerInfo.setLobbyId(messageId);
+                userMapper.update(playerInfo);
             }
 
             players.put(player.getUserId(), player);
@@ -92,8 +99,30 @@ public class Lobby {
         }
     }
 
+    public void removePlayer(Player player){
+        if (!players.containsKey(player.getUserId())){
+            return;
+        }
+        PlayerInfo playerInfo = new PlayerInfo();
+        playerInfo.setLobbyId("");
+        playerInfo.setUserId(player.getUserId());
+        playerInfo.inLobby = 0;
+        try(SqlSession session = batisBuilder.getSession()) {
+            UserMapper userMapper = session.getMapper(UserMapper.class);
+            userMapper.update(playerInfo);
+        }
+
+        players.remove(player.getUserId());
+        if (player.getUserId().equals(owner.getUserId())){
+            stopLobby();
+        }
+    }
+
     public void stopLobby() {
         if (listener != null){
+            players.forEach((userId,player)->{
+                removePlayer(player);
+            });
             listener.run();
         }
     }

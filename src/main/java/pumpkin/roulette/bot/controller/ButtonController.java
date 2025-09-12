@@ -46,6 +46,19 @@ public class ButtonController {
         event.deferEdit().queue();
     }
 
+    public void leaveLobby(ButtonInteractionEvent event) {
+        Lobby lobby = lobbyController.get(event.getMessageId());
+
+        User newUser = event.getUser();
+        Player player = new Player();
+        player.setUserId(newUser.getId());
+        player.setName(newUser.getName());
+        player.setLobbyId(lobby.getMessageId());
+
+        lobby.removePlayer(player);
+        event.deferEdit().queue();
+    }
+
     public void startGame(ButtonInteractionEvent event) {
         Lobby lobby = lobbyController.get(event.getMessageId());
 
