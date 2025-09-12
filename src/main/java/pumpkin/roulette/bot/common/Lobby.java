@@ -2,6 +2,7 @@ package pumpkin.roulette.bot.common;
 
 import lombok.Data;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.apache.ibatis.session.SqlSession;
@@ -26,9 +27,8 @@ public class Lobby {
     private String messageId; // lobbyId
     private String channelId;
 
-    private int playerCount;
     private HashMap<String, Player> players; // userId <-> Player
-    private boolean joining;
+    private boolean isStarted;
     private boolean closed;
     private int maxPlayers;
     private Player owner;
@@ -47,6 +47,7 @@ public class Lobby {
         this.api = api;
         this.players = new HashMap<>();
         this.closed = false;
+        this.isStarted = false;
         this.maxPlayers = LobbyEnums.MAX_PLAYERS.getValue();
         this.owner = owner;
         this.bets = 0;
@@ -59,7 +60,12 @@ public class Lobby {
         if (!operator.getName().equals(owner.getName())){
             return;
         }
+        isStarted = true;
         drawBetMenu();
+    }
+
+    public int getPlayerCount(){
+        return players.size();
     }
 
     public void addPlayer(Player player){
@@ -87,11 +93,10 @@ public class Lobby {
             }
 
             players.put(player.getUserId(), player);
-            playerCount++;
 
             drawStartMenu();
 
-            if (playerCount == maxPlayers){
+            if (getPlayerCount() == maxPlayers){
                 startGame(owner);
             }
         }catch (Exception e){
@@ -103,18 +108,31 @@ public class Lobby {
         if (!players.containsKey(player.getUserId())){
             return;
         }
-        PlayerInfo playerInfo = new PlayerInfo();
-        playerInfo.setLobbyId("");
-        playerInfo.setUserId(player.getUserId());
-        playerInfo.inLobby = 0;
         try(SqlSession session = batisBuilder.getSession()) {
             UserMapper userMapper = session.getMapper(UserMapper.class);
+            PlayerInfo playerInfo = userMapper.selectByUserId(player.getUserId());
+            playerInfo.setLobbyId("");
+            playerInfo.setUserId(player.getUserId());
+            playerInfo.inLobby = 0;
             userMapper.update(playerInfo);
         }
 
         players.remove(player.getUserId());
+
+        if (!isStarted){
+            drawStartMenu();
+        }else{
+            drawBetMenu();
+        }
+
         if (player.getUserId().equals(owner.getUserId())){
             stopLobby();
+            return;
+        }
+
+        if (bets == getPlayerCount()){
+            System.out.println("Betting phase closed");
+            startSpin();
         }
     }
 
@@ -123,6 +141,10 @@ public class Lobby {
             players.forEach((userId,player)->{
                 removePlayer(player);
             });
+            Message message = api.getTextChannelById(channelId).retrieveMessageById(messageId).complete();
+            String rawMessage = message.getContentRaw();
+            rawMessage += "\n\n**LOBBY CLOSED**";
+            api.getTextChannelById(channelId).editMessageById(messageId, rawMessage).queue();
             listener.run();
         }
     }
@@ -178,7 +200,7 @@ public class Lobby {
 
             drawBetMenu();
 
-            if (bets == playerCount){
+            if (bets == getPlayerCount()){
                 System.out.println("Betting phase closed");
                 startSpin();
             }
@@ -205,6 +227,7 @@ public class Lobby {
         textChannel.editMessageById(messageId, message)
                 .setActionRow(
                         Button.secondary("join", "Join Game"),
+                        Button.danger("leave", "Leave Game"),
                         Button.primary("start", "Start Game")
                 )
                 .queue();
@@ -216,7 +239,8 @@ public class Lobby {
         String message = MessageBuilder.buildBetMenu(this);
         textChannel.editMessageById(messageId, message)
                 .setActionRow(
-                        Button.primary("openbetmodal", "Place Bet")
+                        Button.primary("openbetmodal", "Place Bet"),
+                        Button.danger("leave", "Leave Game")
                 )
                 .queue();
     }

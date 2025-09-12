@@ -47,16 +47,29 @@ public class ButtonController {
     }
 
     public void leaveLobby(ButtonInteractionEvent event) {
-        Lobby lobby = lobbyController.get(event.getMessageId());
+        try(SqlSession session = batisBuilder.getSession()) {
+            UserMapper userMapper = session.getMapper(UserMapper.class);
+            PlayerInfo playerInfo = userMapper.selectByUserId(event.getUser().getId());
+            String lobbyId = playerInfo.getLobbyId();
+            Player player = new Player();
+            player.setUserId(playerInfo.getUserId());
+            Lobby lobby = lobbyController.get(lobbyId);
 
-        User newUser = event.getUser();
-        Player player = new Player();
-        player.setUserId(newUser.getId());
-        player.setName(newUser.getName());
-        player.setLobbyId(lobby.getMessageId());
-
-        lobby.removePlayer(player);
-        event.deferEdit().queue();
+            try{
+                lobby.removePlayer(player);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+                System.out.println("Lobby not found, likely because lobby was already emptied due to restart. Manually clearing player data");
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+                System.out.println("Critical error, manually clearing player data");
+            }finally{
+                playerInfo.setLobbyId("");
+                playerInfo.setInLobby(0);
+                userMapper.update(playerInfo);
+                event.deferEdit().queue();
+            }
+        }
     }
 
     public void startGame(ButtonInteractionEvent event) {

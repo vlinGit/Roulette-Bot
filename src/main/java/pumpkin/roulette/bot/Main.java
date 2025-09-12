@@ -17,8 +17,7 @@ import java.io.IOException;
 // TODO:
 // - Only allow users to be in one lobby at a time
 //      - Current behavior, when owner leaves lobby ends (using !leave command)
-//      - Need to add leave button
-//      - Test leave with non-owner
+//      - When player is added or removed during the bet phase, check if spin should start
 //      - Test if users can join 2 lobbies
 // - Allow users to leave lobbies
 // - Add more bet options:

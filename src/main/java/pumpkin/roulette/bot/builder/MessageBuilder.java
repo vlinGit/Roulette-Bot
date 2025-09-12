@@ -26,7 +26,8 @@ public class MessageBuilder {
                 "**!stats**: view your stats\n" +
                 "**!nextrefill**: see timer until next refill\n" +
                 "**!give**: gives money to another player. Format: !give @<reciever> <amount> (Note: there is a space between each word!)\n" +
-                "**!leaderboard**: shows top 10 richest players";
+                "**!leaderboard**: shows top 10 richest players\n" +
+                "**!leave**: removes you from the current lobby you are in";
         return message;
     }
 
