@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.apache.ibatis.session.SqlSession;
 import pumpkin.roulette.bot.BatisBuilder;
 import pumpkin.roulette.bot.builder.MessageBuilder;
+import pumpkin.roulette.bot.enums.BetEnum;
 import pumpkin.roulette.bot.enums.LobbyEnums;
 import pumpkin.roulette.bot.enums.WinningEnums;
 import pumpkin.roulette.bot.mapper.UserMapper;
@@ -121,6 +122,18 @@ public class Lobby {
                 player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.COLOR.getValue());
             }else if(winningParity.matches(playerBet.getBet())) {
                 player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.PARITY.getValue());
+            }else if(playerBet.getBet().equals(BetEnum.C1.getValue()) && winningNumber % 3 == 1){
+                player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.COLUMN.getValue());
+            }else if(playerBet.getBet().equals(BetEnum.C2.getValue()) && winningNumber % 3 == 2){
+                player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.COLUMN.getValue());
+            }else if(playerBet.getBet().equals(BetEnum.C3.getValue()) && winningNumber % 3 == 0){
+                player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.COLUMN.getValue());
+            }else if(playerBet.getBet().equals(BetEnum.D1.getValue()) && winningNumber / 12.0 <= 1){
+                player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.DOZEN.getValue());
+            }else if(playerBet.getBet().equals(BetEnum.D2.getValue()) && winningNumber / 12.0 <= 2 && winningNumber / 12.0 > 1){
+                player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.DOZEN.getValue());
+            }else if(playerBet.getBet().equals(BetEnum.D3.getValue()) && winningNumber / 12.0 <= 3 && winningNumber / 12.0 > 2){
+                player.setWinnings(player.getWinnings() + playerBet.getAmount() * WinningEnums.DOZEN.getValue());
             }
         });
 

@@ -5,13 +5,15 @@
         <result column="userId" property="userId" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="balance" property="balance" jdbcType="BIGINT"/>
+        <result column="steals" property="steals" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="BaseColumn">
         id,
         userId,
         name,
-        balance
+        balance,
+        steals
     </sql>
 
     <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -49,7 +51,10 @@
                     name=#{name, jdbcType=VARCHAR} AND
                 </if>
                 <if test="balance != null">
-                    balance=#{balance, jdbcType=BIGINT}
+                    balance=#{balance, jdbcType=BIGINT} AND
+                </if>
+                <if test="steals != null">
+                    steals=#{steals, jdbcType=INTEGER}
                 </if>
             </trim>
     </select>
@@ -60,6 +65,13 @@
         FROM
             users
         ORDER BY balance DESC LIMIT 10;
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap" parameterType="pumpkin.roulette.bot.common.PlayerInfo">
+        SELECT
+            <include refid="BaseColumn"/>
+        FROM
+            users
     </select>
 
     <insert id="insert" parameterType="pumpkin.roulette.bot.common.PlayerInfo" useGeneratedKeys="true" keyProperty="id">
@@ -73,7 +85,8 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             #{userId, jdbcType=VARCHAR},
             #{name, jdbcType=VARCHAR},
-            #{balance, jdbcType=BIGINT}
+            #{balance, jdbcType=BIGINT},
+            #{steals, jdbcType=INTEGER}
         </trim>
     </insert>
 
@@ -82,7 +95,8 @@
         <set>
             userId = #{userId, jdbcType=VARCHAR},
             name = #{name, jdbcType=VARCHAR},
-            balance = #{balance, jdbcType=BIGINT}
+            balance = #{balance, jdbcType=BIGINT},
+            steals = #{steals, jdbcType=INTEGER}
         </set>
         WHERE
             userId = #{userId, jdbcType=VARCHAR}

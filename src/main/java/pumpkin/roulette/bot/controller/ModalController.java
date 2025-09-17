@@ -32,7 +32,7 @@ public class ModalController {
         String userId = event.getUser().getId();
         Lobby lobby = lobbyController.get(lobbyId);
 
-        Pattern betPattern = Pattern.compile("\\b(?:black|red|even|odd|[1-9]|[12][0-9]|3[0-6])\\b", Pattern.CASE_INSENSITIVE);
+        Pattern betPattern = Pattern.compile("\\b(?:black|red|even|odd|c1|c2|c3|d1|d2|d3|[1-9]|[12][0-9]|3[0-6])\\b", Pattern.CASE_INSENSITIVE);
         if (!lobby.getPlayers().containsKey(userId)){
             event.reply("You are not in this lobby")
                     .setEphemeral(true)

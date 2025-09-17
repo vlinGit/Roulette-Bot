@@ -11,6 +11,8 @@ public interface UserMapper extends CommonMapper<PlayerInfo>{
 
     List<PlayerInfo> selectByPlayerInfo(PlayerInfo playerInfo);
 
+    List<PlayerInfo> selectAll();
+
     int insert(PlayerInfo playerInfo);
 
     int update(PlayerInfo playerInfo);

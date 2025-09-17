@@ -10,14 +10,16 @@ public class PlayerInfo {
     String userId;
     String name;
     long balance;
+    int steals;
 
     public MessageEmbed toEmbed(){
         return new EmbedBuilder()
                 .setTitle(name + " Info")
-                .addField("ID", id + "", false)
+                .addField("ID", String.valueOf(id), false)
                 .addField("UserID", userId, false)
                 .addField("Name", name, false)
-                .addField("Balance", balance + "", false)
+                .addField("Balance", String.valueOf(balance), false)
+                .addField("Steals", String.valueOf(steals), false)
                 .build();
     }
 }

@@ -1,9 +1,12 @@
 package pumpkin.roulette.bot.enums;
 
 public enum WinningEnums {
-    NUMBER (35),
+    NUMBER (36),
     COLOR (2),
-    PARITY (2);
+    PARITY (2),
+    COLUMN (3),
+    DOZEN (3),
+    ;
 
     private int value;
 
