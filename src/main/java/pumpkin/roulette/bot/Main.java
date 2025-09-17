@@ -12,6 +12,14 @@ import pumpkin.roulette.bot.router.MessageRouter;
 import java.io.IOException;
 
 // TODO:
+// - Add more bet options:
+//      - column bet (2 to 1)
+//      - dozens (2 to 1)
+//      - 18 numbers (even)
+// - Add help menu for all bets
+
+// - Rob mechanic
+// - Separate logic so it's unique per server
 // - Show final balance after spin
 // - Track timestamp via DB
 //      - update timestamp every loop
@@ -20,6 +28,8 @@ import java.io.IOException;
 // - Come up with a way that allows me to edit the results live
 // - Add a green option (should deduct percentages from changes of red/black)
 // - randomize roulette spin time
+// - stock market
+// - web gui for placing bets
 public class Main {
     public static void main(String[] args) throws IOException {
         BatisBuilder batisBuilder = new BatisBuilder();
@@ -44,7 +54,10 @@ public class Main {
         router.addMessageRoute("!help", messageController::helpMenu);
         router.addMessageRoute("!nextrefill", messageController::nextRefill);
         router.addMessageRoute("!give", messageController::give);
+        router.addMessageRoute("!steal", messageController::steal);
+        router.addMessageRoute("!stealrules", messageController::stealrules);
         router.addMessageRoute("!leaderboard", messageController::leaderboard);
+        router.addMessageRoute("!bets", messageController::bets);
 
         router.addButtonRoute("join", buttonController::joinLobby);
         router.addButtonRoute("start", buttonController::startGame);

@@ -45,6 +45,15 @@ public class Refiller {
                         userMapper.update(playerInfo);
                     }
                 }
+
+                List<PlayerInfo> allPlayers = userMapper.selectAll();
+                if (!allPlayers.isEmpty()) {
+                    for (PlayerInfo playerInfo : allPlayers) {
+                        playerInfo.setSteals(playerInfo.getSteals() + (int) DefaultEnums.RECHARGE_STEALS.getValue());
+                        userMapper.update(playerInfo);
+                    }
+                }
+
                 updateTimestamp();
             }catch(Exception e){
                 e.printStackTrace();
