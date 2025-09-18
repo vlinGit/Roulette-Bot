@@ -53,9 +53,6 @@
                 <if test="balance != null">
                     balance=#{balance, jdbcType=BIGINT} AND
                 </if>
-                <if test="steals != null">
-                    steals=#{steals, jdbcType=INTEGER}
-                </if>
             </trim>
     </select>
 
