@@ -30,6 +30,7 @@ public class BotListener extends ListenerAdapter {
                 playerInfo.setUserId(userId);
                 playerInfo.setName(name);
                 playerInfo.setBalance(DefaultEnums.START_BALANCE.getValue());
+                playerInfo.setSteals((int) DefaultEnums.RECHARGE_STEALS.getValue());
 
                 userMapper.insert(playerInfo);
             }

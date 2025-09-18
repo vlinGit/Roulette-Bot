@@ -79,7 +79,8 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             userId,
             name,
-            balance
+            balance,
+            steals
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -13,12 +13,9 @@ import java.io.IOException;
 
 // TODO:
 // - Add more bet options:
-//      - column bet (2 to 1)
-//      - dozens (2 to 1)
 //      - 18 numbers (even)
 // - Add help menu for all bets
 
-// - Rob mechanic
 // - Separate logic so it's unique per server
 // - Show final balance after spin
 // - Track timestamp via DB
@@ -27,7 +24,6 @@ import java.io.IOException;
 // - Make enums take fields from application.properties
 // - Come up with a way that allows me to edit the results live
 // - Add a green option (should deduct percentages from changes of red/black)
-// - randomize roulette spin time
 // - stock market
 // - web gui for placing bets
 public class Main {
