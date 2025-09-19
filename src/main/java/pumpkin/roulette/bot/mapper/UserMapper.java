@@ -11,6 +11,8 @@ public interface UserMapper extends CommonMapper<PlayerInfo>{
 
     List<PlayerInfo> selectByPlayerInfo(PlayerInfo playerInfo);
 
+    List<PlayerInfo> selectMaxBalance(long balance);
+
     List<PlayerInfo> selectAll();
 
     int insert(PlayerInfo playerInfo);

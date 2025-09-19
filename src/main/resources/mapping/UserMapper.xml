@@ -56,6 +56,17 @@
             </trim>
     </select>
 
+    <select id="selectMaxBalance" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+            <include refid="BaseColumn"/>
+        FROM
+            users
+        WHERE
+            <![CDATA[
+                balance <= #{balance, jdbcType=BIGINT}
+            ]]>
+    </select>
+
     <select id="selectLeaderboard" resultMap="BaseResultMap" parameterType="pumpkin.roulette.bot.common.PlayerInfo">
         SELECT
             <include refid="BaseColumn"/>

@@ -126,8 +126,8 @@ public class MessageBuilder {
     public static String buildStealrules(){
         StringBuilder builder = new StringBuilder();
         builder.append("**Steal Rules**\n")
-                .append("1. Your balance must be at least " + (StealEnum.STEAL_MIN_BAL.getValue() * 100) + "% of the steal amount\n")
-                .append("2. You must pay a " + (StealEnum.STEAL_FEE.getValue() * 100) + "% fee of the steal amount\n")
+                .append("1. The max amount is 20% of the victim's balance\n")
+                .append("2. The final amount to steal is calculated with this formula: [Max Amount * " + StealEnum.STEAL_BASE.getValue() + "^(X-" +  StealEnum.STEAL_OFFSET.getValue() + ")] where X is a random number between 0-1\n")
                 .append("3. The chance of a successful steal is " + (StealEnum.STEAL_CHANCE.getValue() * 100) + "%\n")
                 .append("4. You get " + DefaultEnums.RECHARGE_STEALS.getValue() + " steal every 24hr. Once you are out, you cannot steal until you get another one\n");
 

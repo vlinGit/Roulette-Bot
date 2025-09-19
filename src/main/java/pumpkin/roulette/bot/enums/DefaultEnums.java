@@ -4,7 +4,7 @@ public enum DefaultEnums {
     START_BALANCE (100),
     RECHARGE_BALANCE (100),
     RECHARGE_DAYS(1),
-    RECHARGE_STEALS(2),
+    RECHARGE_STEALS(1),
     ;
 
     private long value;
